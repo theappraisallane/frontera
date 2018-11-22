@@ -16,9 +16,9 @@ from traceback import format_tb
 from os.path import join as os_path_join
 
 
-DEFAULT_BATCH_SIZE = 1024 * 1024
-DEFAULT_BUFFER_MEMORY = 130 * 1024 * 1024
-DEFAULT_MAX_REQUEST_SIZE = 4 * 1024 * 1024
+DEFAULT_BATCH_SIZE = 1024 * 1024 * 10
+DEFAULT_BUFFER_MEMORY = 130 * 1024 * 1024 * 10
+DEFAULT_MAX_REQUEST_SIZE = 4 * 1024 * 1024 * 10
 
 logger = getLogger("messagebus.kafka")
 
