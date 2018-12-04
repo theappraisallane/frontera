@@ -51,6 +51,7 @@ class Consumer(BaseStreamConsumer):
             request_timeout_ms=120 * 1000,
             heartbeat_interval_ms=10000,
             max_poll_interval_ms=900 * 1000,
+            session_timeout_ms= 10000 * 3,
             **kwargs
         )
 
