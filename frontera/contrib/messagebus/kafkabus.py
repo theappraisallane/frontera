@@ -45,13 +45,13 @@ class Consumer(BaseStreamConsumer):
         self._consumer = KafkaConsumer(
             bootstrap_servers=self._location,
             group_id=self._group,
-            max_partition_fetch_bytes=10485760,
+            max_partition_fetch_bytes=10485760 / 2,
             consumer_timeout_ms=200,
             client_id="%s-%s" % (self._topic, str(partition_id) if partition_id is not None else "all"),
             request_timeout_ms=120 * 1000,
             heartbeat_interval_ms=10000,
             max_poll_interval_ms=900 * 1000,
-            session_timeout_ms= 10000 * 3,
+            session_timeout_ms=10000 * 3,
             **kwargs
         )
 
