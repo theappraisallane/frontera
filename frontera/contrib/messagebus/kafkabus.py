@@ -51,7 +51,7 @@ class Consumer(BaseStreamConsumer):
             request_timeout_ms=60000 * 2,
             heartbeat_interval_ms=30000,
             max_poll_interval_ms=60000 * 30,
-            session_timeout_ms= 30000 * 3,
+            session_timeout_ms=30000 * 3,
             **kwargs
         )
 
@@ -98,6 +98,7 @@ class SimpleProducer(BaseStreamProducer):
                                        retries=5,
                                        compression_type=self._compression,
                                        max_request_size=max_request_size,
+                                       connections_max_idle_ms=60000 * 35,
                                        **kwargs)
 
     def send(self, key, *messages):
