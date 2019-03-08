@@ -103,7 +103,7 @@ class SimpleProducer(BaseStreamProducer):
 
     def send(self, key, *messages):
         for msg in messages:
-            self._producer.send(self._topic, value=msg)
+            self._producer.send(self._topic, value=msg.encode('utf-8'))
 
     def flush(self):
         self._producer.flush()
@@ -129,7 +129,7 @@ class KeyedProducer(BaseStreamProducer):
 
     def send(self, key, *messages):
         for msg in messages:
-            self._producer.send(self._topic_done, key=key, value=msg)
+            self._producer.send(self._topic_done, key=key, value=msg.encode('utf-8'))
 
     def flush(self):
         self._producer.flush()
