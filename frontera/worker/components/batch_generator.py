@@ -27,7 +27,7 @@ class BatchGenerator(DBWorkerThreadComponent):
         self.spider_feed = worker.message_bus.spider_feed()
         self.spider_feed_producer = self.spider_feed.producer()
 
-        self.get_key_function = self.get_fingerprint
+        self.get_key_function = self.get_partition_id
         if settings.get('QUEUE_HOSTNAME_PARTITIONING'):
             self.get_key_function = self.get_hostname
 
@@ -125,6 +125,9 @@ class BatchGenerator(DBWorkerThreadComponent):
 
     def get_fingerprint(self, request):
         return request.meta[b'fingerprint']
+
+    def get_partition_id(self, request):
+        return request.meta[b'partition_id']
 
     def get_hostname(self, request):
         return request.meta[b'domain'][b'name']

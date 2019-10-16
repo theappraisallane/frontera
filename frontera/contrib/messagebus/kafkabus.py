@@ -6,11 +6,13 @@ from logging import getLogger
 import six
 from kafka import KafkaConsumer, KafkaProducer, TopicPartition
 
-from frontera.contrib.backends.partitioners import FingerprintPartitioner, Crc32NamePartitioner
+from frontera.contrib.backends.partitioners import FingerprintPartitioner, Crc32NamePartitioner, QueuePartitioner
 from frontera.contrib.messagebus.kafka.offsets_fetcher import OffsetsFetcherAsync
 from frontera.contrib.messagebus.kafka.transport import FramedTransport
-from frontera.core.messagebus import BaseMessageBus, BaseSpiderLogStream, BaseSpiderFeedStream, \
+from frontera.core.messagebus import (
+    BaseMessageBus, BaseSpiderLogStream, BaseSpiderFeedStream,
     BaseStreamConsumer, BaseScoringLogStream, BaseStreamProducer, BaseStatsLogStream
+)
 from os.path import join as os_path_join
 
 
@@ -52,8 +54,12 @@ class Consumer(BaseStreamConsumer):
             max_poll_interval_ms=60000 * 30,
             session_timeout_ms=30000 * 3,
             connections_max_idle_ms=60000 * 35,
+            auto_offset_reset='earliest',
             **kwargs
         )
+
+        # explicitly causing consumer to bootstrap the cluster metadata
+        self._consumer.topics()
 
         if partition_id is not None:
             self._partitions = [TopicPartition(self._topic, partition_id)]
@@ -208,8 +214,7 @@ class SpiderFeedStream(BaseSpiderFeedStream):
         return partitions
 
     def producer(self):
-        partitioner = Crc32NamePartitioner(self._partitions) if self._hostname_partitioning \
-            else FingerprintPartitioner(self._partitions)
+        partitioner = QueuePartitioner(self._partitions)
         return KeyedProducer(self._location, self._enable_ssl, self._cert_path, self._topic, partitioner, self._codec,
                              batch_size=DEFAULT_BATCH_SIZE,
                              buffer_memory=DEFAULT_BUFFER_MEMORY)
