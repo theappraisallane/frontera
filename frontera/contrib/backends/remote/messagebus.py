@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
 from frontera import Backend
 from frontera.core import OverusedBuffer
 from frontera.utils.misc import load_object
@@ -45,7 +44,7 @@ class MessageBusBackend(Backend):
         self.consumer.close()
 
     def add_seeds(self, seeds):
-        raise NotImplemented("The seeds addition using spider log isn't allowed")
+        raise NotImplementedError("The seeds addition using spider log isn't allowed")
 
     def page_crawled(self, response):
         host_fprint = get_host_fprint(response)
